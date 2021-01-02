@@ -5,3 +5,18 @@ Here are some ideas for the Mastermind game
 These are optional ones:
   1.Make a list of 4-5 music tracks that a user can select
   2.Themes: dark/light, picture selection or something else
+  
+Required:
+- Game is for 2 players and in 2D
+- 2 modern browsers (eg. Chrome & Firefox)
+- Works on laptop/desktop of resolution 1366x768 (not responsive)
+- When entering URL, splash screen is shown with statistics. Pick 3 stats you want to report. Add brief description + how to play
+- When pressing play, user enters the game screen and waits for sufficient number of players to start playing (with waiting screen). When enough, game automatically starts
+- Server supports multiple games at the same time
+- Invalid moves are not possible
+- If a player wins, both players are notified who the winner is
+- If a player leaves the game, the game is aborted which is announced to the player left
+- Players can see the time passed since starting the game and number of lost/won pieces
+- Players play with the mouse (click events)
+- Splash and game screens need to look good with all required game elements visible
+- At least 1 sound effect
