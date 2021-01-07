@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+<style>
+body {background-color: gray}
+h1,h2 {color:#F5F2F3;font-family:Helvetica,Arial,sans-serif;font-size:50px;overflow:hidden; text-shadow: 1px 1px 1px #4D4044}
+.hide {visibility: hidden}
+.buttons {font-family:Helvetica,Arial,sans-serif;font-size:50px;overflow:hidden; text-shadow: 1px 1px 1px #4D4044}
+.buttons:hover {text-shadow: 1px 1px 1px #E8E8E8}
+#submitButton {font-weight:bold;color:green;float:left;}
+#undoButton	{font-weight:bold;color:red;float:left;}
+#cheatButton	{font-weight:bold;color:orange;float:left;}
+#red, .red {background-color:red}
+#blue, .blue {background-color:blue}
+#white, .white {background-color:white}
+#brown, .brown {background-color:brown}
+#orange, .orange {background-color:orange}
+#yellow, .yellow {background-color:yellow}
+#black, .black {background-color:black}
+#green, .green {background-color:green}
+.peg {padding: 2px; border-radius:50%; width:30px; height:30px; float: left; box-shadow: 1px 2px 1px #4D4044}
+.pegSelector {float: left; box-shadow: 1px 1px 1px #4D4044}
+.pegSelector:hover {box-shadow: 1px 1px 1px #E8E8E8}
+.pin {border-radius:50%; width:10px; height:10px; float: left; margin: 0 auto; box-shadow: 1px 2px 1px #4D4044}
+.empty {background-color: #919191}
+</style>
+
+<script type="text/javascript">
+var codeLength = 5,
+	codePegs = [],
+	colorPositionMatches = 0,
+	colorMatches = 0,
+	colors = ["white","black","red","blue","green","yellow","orange","brown"],
+	gameDivId = "gameDiv",
+	gamePegs = [],
+	currentTurn = 1,
+	maxTurn = 12,
+	stateLose = 1,
+	stateGame = 0,
+	stateWin = 2;
+	newGameBoardHtml = "";
+
+
+var startGame = function() {
+	codePegs = createRowData();
+	currentTurn = 1;
+	startTurn();
+}
+
+var startTurn = function() {
+	gamePegs = [];
+	colorPositionMatches = 0;
+	colorMatches = 0;
+}
+
+
+var selectPeg = function(color) {
+	if (gamePegs.length < codeLength) {
+		var peg = new Object();
+
+		peg.position = gamePegs.length+1;
+		peg.color = color;
+		peg.colorMatched = false;
+		peg.colorPositionMatched = false;
+
+		gamePegs.push(peg);
+		renderGameRow();
+	}
+}
+
+var unselectPeg = function(event) {
+	//remove the last member of the gamePeg array
+	if (gamePegs.length > 0) {
+		gamePegs.splice(gamePegs.length-1,1)
+		renderGameRow();
+	}
+}
+
+var renderNewGameBoard = function () {
+	var gameDiv = document.getElementById(gameDivId);
+	gameDiv.innerHTML = newGameBoardHtml;
+}
+
+var renderGameRow = function(){
+	var rowToPopulate = document.getElementById("turn" + currentTurn),
+		rowInnerHTML = "";
+
+	//This function should be done with templates
+	//Black pins
+	for (var blackPins = 0; blackPins < colorPositionMatches; blackPins++) {
+		rowInnerHTML = rowInnerHTML + '<div class="pin black"></div>';
+	}
+
+	//White pins
+	for (var whitePins = 0; whitePins < colorMatches; whitePins++) {
+		rowInnerHTML = rowInnerHTML + '<div class="pin white"></div>';
+	}
+
+	//Pin holes
+	for (var emptyPins = 0; emptyPins < (codeLength - colorMatches - colorPositionMatches); emptyPins++) {
+		rowInnerHTML = rowInnerHTML + '<div class="pin empty"></div>';
+	}
+
+	//Colored pegs
+	for (var gamePegsIdx = 0; gamePegsIdx < gamePegs.length; gamePegsIdx++) {
+		rowInnerHTML = rowInnerHTML + '<div class="peg ' + gamePegs[gamePegsIdx].color + '"></div>';
+	}
+
+	//Peg holes
+	for (var emptyPins = 0; emptyPins < (codeLength - gamePegs.length); emptyPins++) {
+		rowInnerHTML = rowInnerHTML + '<div class="peg empty"></div>';
+	}
+
+	rowToPopulate.innerHTML = rowInnerHTML;
+
+}
+
+var renderCodeRow = function() {
+	var rowToPopulate = document.getElementById("code"),
+		rowInnerHTML = "";
+
+	//Pseudo-pin space
+	for (var emptyPins = 0; emptyPins < codeLength; emptyPins++) {
+		rowInnerHTML = rowInnerHTML + '<div class="pin hide"></div>';
+	}
+
+	//Code pegs
+	for (var codePegsIdx = 0; codePegsIdx < codePegs.length; codePegsIdx++) {
+		rowInnerHTML = rowInnerHTML + '<div class="peg ' + codePegs[codePegsIdx].color + '"></div>';
+	}
+
+	rowToPopulate.innerHTML = rowInnerHTML;
+
+}
+
+var createRowData = function () {
+	var row=[];
+
+	for (var codeLengthIdx = 0; codeLengthIdx < codeLength; codeLengthIdx++) {
+		var peg = new Object();
+
+		peg.position = codeLengthIdx+1;
+		peg.color = colors[Math.floor(Math.random() * colors.length)];
+		peg.colorMatched = false;
+		peg.colorPositionMatched = false;
+	
+		row.push(peg);
+	}
+	return row;
+}
+
+	
+var handleSolution = function() {
+
+	//Evaluate solutions only if they are long enough to be correct.
+	if (gamePegs.length === codeLength) {
+		var state = evaluateSolution();
+
+		if (currentTurn <= maxTurn && state == stateWin){
+			renderCodeRow();
+			alert("VICTORY! Click OK to play again.");
+			document.location.reload();
+
+		} else if (currentTurn < maxTurn && state == stateLose){
+			renderGameRow();
+			currentTurn++;
+			startTurn();
+
+		} else if (currentTurn == maxTurn && state == stateLose){
+			renderCodeRow();
+			alert("DEFEAT! Click OK to play again.");
+			document.location.reload();
+		}
+
+	} else {
+		//The solution is incomplete
+	}
+}
+
+var evaluateSolution = function () {
+	//"In play" is the default state for the game.
+	var state = stateGame;
+
+	//Look for exact matches. 
+	checkColorPositionMatches();
+
+	//If every peg matches exactly, the game was won
+	if (colorPositionMatches == codeLength) {
+		state = stateWin;
+		
+	} else {
+		//Look for color matches among the unmatched pegs.
+		checkColorMatches();
+		state = stateLose;
+	}
+
+	//Reset the match state of each codePeg
+	unmatchCodePegs();
+
+	return state;
+}
+
+var checkColorPositionMatches = function() {
+	colorPositionMatches = 0;
+
+	codePegLoop:
+	for (var codePegIdx=0;codePegIdx<codePegs.length;codePegIdx++) {
+		var codePeg = codePegs[codePegIdx];
+
+		//evaluate each gamePeg, stopping if we hit an exact match.
+		gamePegLoop:
+		for (var gamePegIdx=0;gamePegIdx<gamePegs.length;gamePegIdx++) {
+			var gamePeg = gamePegs[gamePegIdx];
+
+			if ((gamePeg.color == codePeg.color) &&
+				(gamePeg.position == codePeg.position)) {
+						
+					gamePeg.colorPositionMatched = true;
+					codePeg.colorPositionMatched = true;
+
+					colorPositionMatches++;
+
+					break gamePegLoop;
+			}
+		}
+	}
+}
+
+var checkColorMatches = function() {
+	colorMatches = 0;
+
+	codePegLoop:
+	for (var codePegIdx=0;codePegIdx<codePegs.length;codePegIdx++) {
+		var codePeg = codePegs[codePegIdx];
+
+		//evaluate each unmatched game peg, recording matches as they occur
+		gamePegLoop:
+		for (var gamePegIdx=0;gamePegIdx<gamePegs.length;gamePegIdx++) {
+			var gamePeg = gamePegs[gamePegIdx];
+
+			if (gamePeg.color == codePeg.color && 
+			   (gamePeg.colorMatched == false) &&
+			   (codePeg.colorMatched == false) &&
+			   (gamePeg.colorPositionMatched == false) &&
+			   (codePeg.colorPositionMatched == false)) {
+
+				gamePeg.colorMatched=true;
+				codePeg.colorMatched=true;
+
+				colorMatches++;
+
+				break gamePegLoop;
+			}
+		}
+	}
+}
+
+
+var unmatchCodePegs = function() {
+	for (var codePegIdx=0;codePegIdx<codePegs.length;codePegIdx++) {
+			var codePeg = codePegs[codePegIdx];
+			
+			codePeg.colorPositionMatched = false;
+			codePeg.colorMatched = false;
+	}
+
+}
+</script>
+</head>
+<body onload="startGame()">
+
+<h1>MASTERMIND</h1>
+
+<div id="gameDiv" style="clear:both">
+		<div id="code" style="clear:both">
+		<div class="pin hide"></div>
+		<div class="pin hide"></div>
+		<div class="pin hide"></div>
+		<div class="pin hide"></div>
+		<div class="pin hide"></div>
+		<div class="peg hide"></div>
+		<div class="peg hide"></div>
+		<div class="peg hide"></div>
+		<div class="peg hide"></div>
+		<div class="peg hide"></div>
+	</div>
+	<div id="turn12" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div>
+	<div id="turn11" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div>
+	<div id="turn10" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div>
+	<div id="turn9" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn8" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn7" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn6" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn5" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn4" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn3" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn2" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div><div id="turn1" style="clear:both">
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="pin empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+		<div class="peg empty"></div>
+	</div>
+</div>
+
+<div id="controlDiv" style="clear:both">
+	<div id="red" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="blue" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="white" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="brown" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="orange" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="yellow" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="black" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div id="green" class="pegSelector peg" onclick=selectPeg(this.id)></div>
+	<div>
+		<div id="undoButton" class="buttons" onclick=unselectPeg()>  UNDO  </div>
+		<div id="submitButton" class="buttons" onclick=handleSolution()>  SUBMIT  </div>
+		<div id="cheatButton" class="buttons" onclick=renderCodeRow()>  CHEAT  </div>
+	</div>
+</div>
+
+
+</body>
+</html>

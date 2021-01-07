@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<title>Mastermind - Game</title>
 		<link rel="icon" type="image/x-icon" href="pictures/mastermind_favicon.ico">
+		<link rel="stylesheet" href="stylesheets/style.css">
 	</head>
 	
 	<body>
@@ -13,8 +14,9 @@
 		
 		<main>
 			<section align="center">
-				<h2>00.00</h2>
-				<p id="time-passed"></p>
+				<h2>Time elapsed since start of game:</h2>
+				<!-- Press on the contents of the <p> tag to start timer (temporary) -->
+				<p id="time-passed">0</p>
 			</section>
 			
 			<!-- These two sections will be neatly aligned later with CSS -->
@@ -23,28 +25,167 @@
 				<p id="opponent-score">Won:0</p>
 				<p id="opponent-guesses">Guesses:0</p>
 
+
 			</section>
 			
 			<section align="right">
 				<h2>Me</h2>
 				<p id="my-score">Won:0</p>
 				<p id="my-guesses">Guesses:0</p>
+
 			</section>
 			
 			<section>
-				<table border="1" align="left">
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
-					<tr><td>O O O O</td><td>88</td></tr>
+
+				<!-- CREATE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
+				<table align="left">
+					<thead>
+						<tr align="center"><td><div class="peg green"></div><div class="peg red"></div><div class="peg orange"></div><div class="peg yellow"></div></td>
+					</thead>
+					<tbody>
+						<tr class="guess10">
+							<td>
+								<div class="peg green"></div>
+								<div class="peg red"></div>
+								<div class="peg orange"></div>
+								<div class="peg yellow"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess9">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess8">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess7">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess6">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess5">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess4">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess3">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess2">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr class="guess1">
+							<td>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+								<div class="peg empty"></div>
+							</td>
+							<td>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+								<div class="feedback empty"></div>
+							</td>
+						</tr>
+						<tr align="center"><td><div id="red" class="peg selector"></div><div id="blue" class="peg selector"></div><div id="green" class="peg selector"></div></td></tr>
+						<tr align="center"><td><div id="yellow" class="peg selector"></div><div id="orange" class="peg selector"></div><div id="purple" class="peg selector"></div></td></tr>
+					</tbody>
 				</table>
 			</section>
 			
@@ -58,7 +199,7 @@
 			
 			<section>
 				<table border="1" align="right">
-					<tr><td>O O O O</td><td>88</td></tr>
+					<tr><td>O<td>O</td><td>O</td><td>O</td></td><td>88</td></tr>
 					<tr><td>O O O O</td><td>88</td></tr>
 					<tr><td>O O O O</td><td>88</td></tr>
 					<tr><td>O O O O</td><td>88</td></tr>
@@ -73,5 +214,7 @@
 				</table>
 			</section>
 		</main>
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		<script src="javascript/game.js"></script>
 	</body>
 </html>

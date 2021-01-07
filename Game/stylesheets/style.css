@@ -1,0 +1,70 @@
+table {
+	border: 2px double black;
+	padding: 5px;
+}
+
+td {
+	background-color: black;
+}
+
+tr {
+	display: block;
+}
+
+.peg {
+	border-radius:50%;
+	width:30px;
+	height:30px;
+	float: left;
+	margin: 5px;
+}
+
+.feedback {
+	border-radius:50%;
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin: 2px;
+}
+
+.empty {
+	background-color: grey;
+}
+
+.selector {
+
+}
+
+#red, .red {
+	background-color: red;
+}
+
+#blue, .blue {
+	background-color: blue;
+}
+
+#yellow, .yellow {
+	background-color: yellow;
+}
+
+#green, .green {
+	background-color: green;
+}
+
+#orange, .orange {
+	background-color: orange;
+}
+
+#purple, .purple {
+	background-color: purple;
+}
+
+#white, .white {
+	background-color: white;
+}
+
+#black, .black {
+	background-color: black;
+}
+
+
