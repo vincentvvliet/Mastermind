@@ -13,14 +13,28 @@ function GameControls(socket, myTable, opponentTable) {
     this.winner = null;  // "B" or "A"
     //collectCode
     this.code = null;
-    this.currentGuess = null;
-    this.cursor = (function() {
-        let t = document.getElementsByTagName("thead")[2].rows.item(0).cells[0].getElementsByTagName("div")[0];
-        console.log(t);
+    this.currentGuess = (function() {
+        let t = document.getElementsByTagName("thead")[2].rows.item(1).cells[0].getElementsByTagName("div");
+        return t;
     })();
+    this.cursor = this.currentGuess[0];
+    console.log(this.currentGuess);
+    console.log(this.cursor);
 
     //some functions
     this.getPlayerType = function() { return this.playerType; }
+
+    this.addEventListenersToCurrentRow = function() {
+        for(let i = 0; i < 4; i++) {
+            this.currentGuess[i].addEventListener("click", moveCursor);
+        }
+    }
+    
+    this.removeEventListenersFromCurrentRow = function() {
+        for(let i = 0; i < 4; i++) {
+            this.currentGuess[i].removeEventListener("click", moveCursor);
+        }
+    }
 
     this.incrementGuessesMade = function() {
         this.numGuesses++;
@@ -146,6 +160,14 @@ function initialiseTable(num){
     return table;
 }
 
+function moveCursor() {
+
+}
+
+function renderChoice(controls) {
+    //include moveCursor
+}
+
 function submitGuess() {
 
 };
@@ -156,12 +178,14 @@ function submitGuess() {
     var myTable = initialiseTable(2);
     setTimer();
     var controls = new GameControls(null, myTable, oppTable);
-    console.log(controls.colourPicker.board);
+    //console.log(controls.colourPicker.board);
     
     document.getElementsByTagName("button")[0].addEventListener("click", () => {
         //var btn = document.getElementById("Button");
         //btn.disabled = false;
         console.log("Submitted");
+        submitGuess();
+        //console.log(controls.cursor);
     })
 
     
