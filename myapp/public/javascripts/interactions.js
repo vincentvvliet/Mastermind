@@ -6,6 +6,7 @@ var intervals = {};
 function GameControls(socket, myTable, opponentTable) {
     this.playerType = null;
     var gameControls = this;
+    this.state = "active";
     this.MAX_GUESSES = 12;
     this.numGuesses = 0; //+1
     this.opponentTable = opponentTable;
@@ -13,7 +14,7 @@ function GameControls(socket, myTable, opponentTable) {
     this.colourPicker = new ColourPicker(this);
     this.winner = null;  // "B" or "A"
     //collectCode
-    this.code = null;
+    //this.code = null;
     this.currentGuess = (function() {
         let t = document.getElementsByTagName("thead")[2].rows.item(1).cells[0].getElementsByTagName("div");
         return t;
@@ -21,8 +22,8 @@ function GameControls(socket, myTable, opponentTable) {
     
     this.cursorPos = 0;    //should be in [0,3]
     this.cursor = this.currentGuess[this.cursorPos];
-    console.log(this.currentGuess);
-    console.log(this.cursor);
+    //console.log(this.currentGuess);
+    //console.log(this.cursor);
 
     //some functions
     this.getPlayerType = function() { return this.playerType; }
@@ -31,12 +32,14 @@ function GameControls(socket, myTable, opponentTable) {
         this.currentGuess[pos].addEventListener("click", function() {
             gameControls.cursorPos = pos;
             gameControls.cursor = gameControls.currentGuess[gameControls.cursorPos];
-        });
+         });
     }
     
     this.removeEventListenersFromCurrentRow = function() {
         for(let i = 0; i < 4; i++) {
-            this.currentGuess[i].removeEventListener("click", this.moveCursor);
+            let el = gameControls.currentGuess[i];
+            let elClone = el.cloneNode(true);
+            el.parentNode.replaceChild(elClone, el);
         }
     }
 
@@ -73,8 +76,9 @@ function GameControls(socket, myTable, opponentTable) {
 
     //pos is either controls.pos or (selectedPos - 1)
     this.moveCursor = (pos) => {
+        if(this.state !== "active") return;
         //if position is valid
-        //console.log(this);
+        console.log(this.cursorPos);
         if(this.cursorPos === 3) this.colourPicker.submitButton.disabled = false;
         if(pos < 3) {
             this.cursorPos = pos + 1;
@@ -83,6 +87,41 @@ function GameControls(socket, myTable, opponentTable) {
            // console.log(this);
         }
     };
+
+    this.submitGuess = function() {
+        let choice = [];
+        for(let i = 0; i < 4; i++) choice.push(gameControls.currentGuess[i].className.substring(4));
+        //send jason to the sever
+        console.log(choice);
+    
+        gameControls.removeEventListenersFromCurrentRow();
+        //check the guess numba
+        if(gameControls.numGuesses === gameControls.MAX_GUESSES) {
+            //some logic
+            gameControls.state = "passive";
+            gameControls.colourPicker.submitButton.disabled = true;
+            gameControls.numGuesses++;
+            stopTimer();
+            document.getElementsByTagName("thead")[0].rows[0].hidden = false;
+            alert("Game over");
+            console.log(gameControls.numGuesses);
+            return;
+        }
+        //update the row
+        gameControls.currentGuess = gameControls.opponentTable[gameControls.MAX_GUESSES - 1 - gameControls.numGuesses];
+        //update the cursor
+        gameControls.cursorPos = 0;
+        gameControls.cursor = gameControls.currentGuess[0];
+
+        gameControls.numGuesses++;
+        gameControls.colourPicker.submitButton.disabled = true;
+        gameControls.state = "passive";
+    };
+
+    this.startGuess = function() {
+        gameControls.state = "active";
+        gameControls.addEventListenersCurrentPos(0);
+    }
     
 }
 
@@ -112,9 +151,10 @@ function ColourPicker(controls) {
         return b;
     })();
 
+    //remember that this f is called ON the colourPicker object
     this.renderChoice = function(picker) {
         //determine colour
-        //console.log(this);
+        if(this.controls.state !== "active") return;
         let colour = picker.className.substring(7);
         //update class
         this.controls.cursor.classList.remove(this.controls.cursor.classList.item(1));
@@ -199,10 +239,6 @@ function initialiseTable(num){
     return table;
 }
 
-function submitGuess(controls) {
-
-};
-
 (function setup() {
     //initialising boards for opponent and me and creating 2d arrays with references to the cells
     var oppTable = initialiseTable(0);
@@ -213,11 +249,17 @@ function submitGuess(controls) {
 
 
     //sampleCode(controls.colourPicker) --> iterate over pegs in current rows and send the choice to the server
-    
     document.getElementsByTagName("button")[0].addEventListener("click", function(){
         console.log("Submitted");
-        //submitGuess();
+        controls.submitGuess();
         //console.log(controls.cursor);
     })
+
+    //onmessage ...
+    document.getElementsByTagName("h1")[0].addEventListener("click", function(){
+        controls.startGuess();
+    })
+
+    //when the game is over, break the server: no interactivity except for the PLAY AGAIN button
     
 })();
