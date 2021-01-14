@@ -9,7 +9,7 @@ function GameControls(socket, myTable, opponentTable) {
     this.numGuesses = 0; //+1
     this.opponentTable = opponentTable;
     this.myTable = myTable;
-    this.colourPicker = new ColourPicker();
+    this.colourPicker = new ColourPicker(this);
     this.winner = null;  // "B" or "A"
     //collectCode
     this.code = null;
@@ -17,7 +17,8 @@ function GameControls(socket, myTable, opponentTable) {
         let t = document.getElementsByTagName("thead")[2].rows.item(1).cells[0].getElementsByTagName("div");
         return t;
     })();
-    this.cursor = this.currentGuess[0];
+    this.cursorPos = 0;    //should be in [0,3]
+    this.cursor = this.currentGuess[this.cursorPos];
     console.log(this.currentGuess);
     console.log(this.cursor);
 
@@ -26,13 +27,13 @@ function GameControls(socket, myTable, opponentTable) {
 
     this.addEventListenersToCurrentRow = function() {
         for(let i = 0; i < 4; i++) {
-            this.currentGuess[i].addEventListener("click", moveCursor);
+            this.currentGuess[i].addEventListener("click", this.moveCursor);
         }
     }
     
     this.removeEventListenersFromCurrentRow = function() {
         for(let i = 0; i < 4; i++) {
-            this.currentGuess[i].removeEventListener("click", moveCursor);
+            this.currentGuess[i].removeEventListener("click", this.moveCursor);
         }
     }
 
@@ -66,6 +67,15 @@ function GameControls(socket, myTable, opponentTable) {
     this.updateGame = function() {
 
     }
+
+    //pos is either controls.pos or (selectedPos - 1)
+    this.moveCursor = function (this, pos) {
+        //if position is valid
+        if(pos < 3) {
+            this.cursorPos = pos + 1;
+            this.cursor  = this.currentGuess[this.cursorPos];
+        }
+    }
     
 }
 
@@ -75,7 +85,8 @@ function GameControls(socket, myTable, opponentTable) {
 //winner : null or A or B
 
 //kinda class ColourPicker
-function ColourPicker() {
+function ColourPicker(controls) {
+    this.controls = controls;
     this.board = (function() {
         let rows = document.getElementsByTagName("tbody")[1].rows;
         let b = [];
@@ -85,9 +96,25 @@ function ColourPicker() {
                 //console.log(b[b.length-1]);
             }
         }
+
+        for(let i = 0; i < b.length; i++) {
+            b[i].addEventListener("click", this.renderChoice(this));
+        }
         return b;
     })();
-    
+
+    //picker is a div
+    this.renderChoice = function (picker) {
+        //determine colour
+        let colour = picker.className.substring(7);
+        //update class
+        controls.cursor.classList.remove(controls.cursor.classList.item(1));
+        controls.cursor.className += " " + colour;
+        //render the choice on the current peg
+        controls.cursor.textContent = colour.substring(0,1).toUpperCase();
+        controls.moveCursor(controls, controls.cursorPos);
+    }
+    //add eventlisteners to the pickers
     this.collectCode = function() {
         return 42;
     };
@@ -101,7 +128,7 @@ function Peg(type, size) {
 
     this.createPeg = function() {
         this.element = document.createElement('div');
-        this.element.className = "empty "  + type + " disabled";
+        this.element.className = type + " empty";
         this.element.textContent = size;
         //console.log(this);
         return this.element;
@@ -160,14 +187,6 @@ function initialiseTable(num){
     return table;
 }
 
-function moveCursor() {
-
-}
-
-function renderChoice(controls) {
-    //include moveCursor
-}
-
 function submitGuess() {
 
 };
@@ -187,6 +206,5 @@ function submitGuess() {
         submitGuess();
         //console.log(controls.cursor);
     })
-
     
 })();
