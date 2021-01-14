@@ -5,6 +5,7 @@ var intervals = {};
 
 function GameControls(socket, myTable, opponentTable) {
     this.playerType = null;
+    var gameControls = this;
     this.MAX_GUESSES = 12;
     this.numGuesses = 0; //+1
     this.opponentTable = opponentTable;
@@ -17,6 +18,7 @@ function GameControls(socket, myTable, opponentTable) {
         let t = document.getElementsByTagName("thead")[2].rows.item(1).cells[0].getElementsByTagName("div");
         return t;
     })();
+    
     this.cursorPos = 0;    //should be in [0,3]
     this.cursor = this.currentGuess[this.cursorPos];
     console.log(this.currentGuess);
@@ -25,10 +27,11 @@ function GameControls(socket, myTable, opponentTable) {
     //some functions
     this.getPlayerType = function() { return this.playerType; }
 
-    this.addEventListenersToCurrentRow = function() {
-        for(let i = 0; i < 4; i++) {
-            this.currentGuess[i].addEventListener("click", this.moveCursor);
-        }
+    this.addEventListenersCurrentPos = function(pos) {
+        this.currentGuess[pos].addEventListener("click", function() {
+            gameControls.cursorPos = pos;
+            gameControls.cursor = gameControls.currentGuess[gameControls.cursorPos];
+        });
     }
     
     this.removeEventListenersFromCurrentRow = function() {
@@ -69,13 +72,17 @@ function GameControls(socket, myTable, opponentTable) {
     }
 
     //pos is either controls.pos or (selectedPos - 1)
-    this.moveCursor = function (this, pos) {
+    this.moveCursor = (pos) => {
         //if position is valid
+        //console.log(this);
+        if(this.cursorPos === 3) this.colourPicker.submitButton.disabled = false;
         if(pos < 3) {
             this.cursorPos = pos + 1;
-            this.cursor  = this.currentGuess[this.cursorPos];
+            this.cursor = this.currentGuess[this.cursorPos];
+            this.addEventListenersCurrentPos(this.cursorPos);
+           // console.log(this);
         }
-    }
+    };
     
 }
 
@@ -86,8 +93,10 @@ function GameControls(socket, myTable, opponentTable) {
 
 //kinda class ColourPicker
 function ColourPicker(controls) {
+    var colourPicker = this;
     this.controls = controls;
-    this.board = (function() {
+    this.submitButton = document.getElementsByTagName("button")[0];
+    this.board = (function() { //controls
         let rows = document.getElementsByTagName("tbody")[1].rows;
         let b = [];
         for(let i = 0; i < 2; i++){
@@ -98,22 +107,25 @@ function ColourPicker(controls) {
         }
 
         for(let i = 0; i < b.length; i++) {
-            b[i].addEventListener("click", this.renderChoice(this));
+            b[i].addEventListener("click", function() { colourPicker.renderChoice(b[i])});
         }
         return b;
     })();
 
-    //picker is a div
-    this.renderChoice = function (picker) {
+    this.renderChoice = function(picker) {
         //determine colour
+        //console.log(this);
         let colour = picker.className.substring(7);
         //update class
-        controls.cursor.classList.remove(controls.cursor.classList.item(1));
-        controls.cursor.className += " " + colour;
+        this.controls.cursor.classList.remove(this.controls.cursor.classList.item(1));
+        this.controls.cursor.className += " " + colour;
         //render the choice on the current peg
-        controls.cursor.textContent = colour.substring(0,1).toUpperCase();
-        controls.moveCursor(controls, controls.cursorPos);
-    }
+        this.controls.cursor.textContent = colour.substring(0,1).toUpperCase();
+        this.controls.moveCursor(this.controls.cursorPos);
+    };
+
+    //picker is a div
+    
     //add eventlisteners to the pickers
     this.collectCode = function() {
         return 42;
@@ -187,7 +199,7 @@ function initialiseTable(num){
     return table;
 }
 
-function submitGuess() {
+function submitGuess(controls) {
 
 };
 
@@ -197,13 +209,14 @@ function submitGuess() {
     var myTable = initialiseTable(2);
     setTimer();
     var controls = new GameControls(null, myTable, oppTable);
-    //console.log(controls.colourPicker.board);
+    controls.addEventListenersCurrentPos(0);
+
+
+    //sampleCode(controls.colourPicker) --> iterate over pegs in current rows and send the choice to the server
     
-    document.getElementsByTagName("button")[0].addEventListener("click", () => {
-        //var btn = document.getElementById("Button");
-        //btn.disabled = false;
+    document.getElementsByTagName("button")[0].addEventListener("click", function(){
         console.log("Submitted");
-        submitGuess();
+        //submitGuess();
         //console.log(controls.cursor);
     })
     
