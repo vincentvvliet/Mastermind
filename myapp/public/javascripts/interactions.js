@@ -1,6 +1,7 @@
 //@ts-check
 
 //let music = new Audio("../data/audio/eminem.mp3");
+var intervals = {};
 
 function GameControls(socket, myTable, opponentTable) {
     this.playerType = null;
@@ -11,7 +12,12 @@ function GameControls(socket, myTable, opponentTable) {
     this.colourPicker = new ColourPicker();
     this.winner = null;  // "B" or "A"
     //collectCode
-    this.code = this.colourPicker.collectCode();
+    this.code = null;
+    this.currentGuess = null;
+    this.cursor = (function() {
+        let t = document.getElementsByTagName("thead")[2].rows.item(0).cells[0].getElementsByTagName("div")[0];
+        console.log(t);
+    })();
 
     //some functions
     this.getPlayerType = function() { return this.playerType; }
@@ -54,14 +60,25 @@ function GameControls(socket, myTable, opponentTable) {
 //white : 2
 //winner : null or A or B
 
-
+//kinda class ColourPicker
 function ColourPicker() {
+    this.board = (function() {
+        let rows = document.getElementsByTagName("tbody")[1].rows;
+        let b = [];
+        for(let i = 0; i < 2; i++){
+            for(let j = 0; j < 3; j++) {
+                b.push(rows[i].getElementsByTagName("div")[j]);
+                //console.log(b[b.length-1]);
+            }
+        }
+        return b;
+    })();
+    
     this.collectCode = function() {
         return 42;
-    }
+    };
 }
 
-//let opponentTable = document.querySelector(".opponenttable");
 
 //kinda class Peg
 function Peg(type, size) {
@@ -70,16 +87,32 @@ function Peg(type, size) {
 
     this.createPeg = function() {
         this.element = document.createElement('div');
-        this.element.className = "peg " + type;
+        this.element.className = "empty "  + type + " disabled";
         this.element.textContent = size;
-        console.log(this);
+        //console.log(this);
         return this.element;
     }
 }
 
 function setTimer() {
+    var timer = document.getElementById("time-passed");
+    //console.log(timer);
+    intervals[timer.id] = setInterval(function(){
+        let time = timer.innerHTML;
+        let seconds = (parseInt(time.substring(time.length - 2)) + 1) % 60;     //get last 2 digits
+        let minutes = parseInt(time.substring(0, time.length - 3));             //exclude .[seconds]
 
+        if(seconds === 0) minutes++;
+        timer.innerHTML = minutes + "." + (seconds < 10 ? "0" + seconds : seconds);
+    }, 1000, timer);
 }
+
+
+function stopTimer() {
+    let timer = document.getElementById("time-passed");
+    clearInterval(intervals[timer.id]);
+}
+
 
 function initialiseTable(num){
     let tables = document.getElementsByTagName("tbody");
@@ -96,7 +129,7 @@ function initialiseTable(num){
 
         //empty pegs
         for(let j = 0; j < 4; j++) {
-            let peg = new Peg("empty", "O").createPeg();
+            let peg = new Peg("peg", "O").createPeg();
             table[12-i][j] = peg;
             attempt.appendChild(peg);
         }
@@ -113,15 +146,23 @@ function initialiseTable(num){
     return table;
 }
 
+function submitGuess() {
+
+};
+
 (function setup() {
     //initialising boards for opponent and me and creating 2d arrays with references to the cells
     var oppTable = initialiseTable(0);
     var myTable = initialiseTable(2);
-    /*for(let i = 0; i < 12; i++) {
-        for(let j = 0; j < 8; j++) {
-            console.log(oppTable[i][j]);
-        }
-    }*/
-    //console.log(Status["intro"]);
+    setTimer();
+    var controls = new GameControls(null, myTable, oppTable);
+    console.log(controls.colourPicker.board);
+    
+    document.getElementsByTagName("button")[0].addEventListener("click", () => {
+        //var btn = document.getElementById("Button");
+        //btn.disabled = false;
+        console.log("Submitted");
+    })
+
     
 })();
