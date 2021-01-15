@@ -1,78 +1,114 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Mastermind - Game</title>
-		<link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
-		
-	</head>
-	
-	<body>
-		<header align="center">
-			<h1>Mastermind</h1>
-		</header>
-		
-		<main>
-			<section align="center">
-				<h2>Time elapsed since start of game:</h2>
-				<p id="time-passed">0.00</p>
-			</section>
-			
-			<!-- These two sections will be neatly aligned later with CSS -->
-			<section align="left">
-				<h2>Opponent</h2>
-				<p id="opponent-score">Won:0</p>
-				<p id="opponent-guesses">Guesses:0</p>
+<head>
+    <meta charset="UTF-8">
+    <title>Mastermind - Game</title>
+    <link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+</head>
 
-			</section>
-			
-			<section align="right">
-				<h2>Me</h2>
-				<p id="my-score">Won:0</p>
-				<p id="my-guesses">Guesses:0</p>
-			</section>
-			
-			<section>
-				<table id="opponenttable" border="1" align="left">
-					<thead>
-						<!-- Code to guess --> 
-						<tr hidden="true" align="center"><td><div class="code">O</div><div class="code">O</div><div class="code">O</div><div class="code">O</div></td>
-					</thead>
-					<tbody>
-						<!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
-					</tbody>
-				</table>
-			</section>
-			
-			<section>
-				<table border="1" align="center">
-					<thead>
-						<tr><td>Make your choice</td></tr>
-					</thead>
-					<tbody>
-						<tr><td><div class="select red">R</div><div class="select blue">B</div><div class="select yellow">Y</div></td></tr>
-						<tr><td><div class="select green">G</div><div class="select orange">O</div><div class="select purple">P</div></td></tr>
-						<tr><td><button disabled>Submit your guess</button></td></tr>
-					</tbody>
-				</table>
-			</section>
-			
-			<section>
-				<table class="mytable" border="1" align="right">
-					<thead>
-						<!-- My code -->
-						<tr><td><div>My code</div></td></tr>
-						<tr align="center"><td><div class="peg empty">O</div><div class="peg empty">O</div><div class="peg empty">O</div><div class="peg empty">O</div></td>
-					</thead>
-					<tbody>
-						<!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
-					</tbody>
-				</table>
-			</section>
-		</main>
-		<script src="javascripts/config.js" language="javascript"></script>
-		<script src="javascripts/statuses.js" language="javascript"></script>
-		<script src="javascripts/interactions.js" language="javascript"></script>
-		
-	</body>
+<body>
+<header align="center">
+    <h1>Mastermind</h1>
+</header>
+
+<main>
+    <section class="container">
+        <section class="left">
+            <h2>Opponent</h2>
+            <p id="opponent-score">Won:0</p>
+            <p id="opponent-guesses">Guesses:0</p>
+
+            <section class="table">
+                <table id="opponentTable" border="1" align="left">
+                    <thead>
+                    <!-- Code to guess -->
+                    <tr hidden="true" align="center">
+                        <td>
+                            <div class="peg code"></div>
+                            <div class="peg code"></div>
+                            <div class="peg code"></div>
+                            <div class="peg code"></div>
+                        </td>
+                    </thead>
+                    <tbody>
+                    <!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
+                    </tbody>
+                </table>
+            </section>
+        </section>
+
+        <section class="center">
+            <h2>Time elapsed since start of game:</h2>
+            <p id="time-passed">0.00</p>
+
+            <section class="colourPicker">
+                <table border="1" align="center">
+                    <thead>
+                    <tr>
+                        <td>Make your choice</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="select red">R</div>
+                            <div class="select blue">B</div>
+                            <div class="select yellow">Y</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="select green">G</div>
+                            <div class="select orange">O</div>
+                            <div class="select purple">P</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button disabled>Submit your guess</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </section>
+
+        <section class="right">
+            <h2>Me</h2>
+            <p id="my-score">Won:0</p>
+            <p id="my-guesses">Guesses:0</p>
+
+            <section class="table">
+                <table class="myTable" border="1" align="right">
+                    <thead>
+                    <!-- My code -->
+                    <tr>
+                        <td>
+                            <div>My code</div>
+                        </td>
+                    </tr>
+                    <tr align="center">
+                        <td>
+                            <div class="peg empty">O</div>
+                            <div class="peg empty">O</div>
+                            <div class="peg empty">O</div>
+                            <div class="peg empty">O</div>
+                        </td>
+                    </thead>
+                    <tbody>
+                    <!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    </section>
+</main>
+<script src="javascripts/config.js" language="javascript"></script>
+<script src="javascripts/statuses.js" language="javascript"></script>
+<script src="javascripts/interactions.js" language="javascript"></script>
+
+</body>
 </html>
