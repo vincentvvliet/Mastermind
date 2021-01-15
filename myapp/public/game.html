@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Mastermind - Game</title>
     <link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+<!--    <link rel="stylesheet" href="stylesheets/style.css">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">-->
 </head>
 
 <body>
@@ -17,13 +17,21 @@
 <main>
     <section class="container">
         <section class="left">
-            <h2>Opponent</h2>
-            <p id="opponent-score">Won:0</p>
-            <p id="opponent-guesses">Guesses:0</p>
+            <div class="oppStats">
+                <h2>Opponent</h2>
+                <p id="opponent-score">Won:0</p>
+                <p id="opponent-guesses">Guesses:0</p>
+            </div>
 
-            <section class="table">
+            <div class="table right">
                 <table id="opponentTable" border="1" align="left">
                     <thead>
+                    <!-- Opponent's code -->
+                    <tr align="center">
+                        <td class="codeText">
+                            <div>Opponent's code</div>
+                        </td>
+                    </tr>
                     <!-- Code to guess -->
                     <tr hidden="true" align="center">
                         <td>
@@ -37,56 +45,60 @@
                     <!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
                     </tbody>
                 </table>
-            </section>
+            </div>
         </section>
 
         <section class="center">
-            <h2>Time elapsed since start of game:</h2>
-            <p id="time-passed">0.00</p>
+            <div class="timer">
+                <h2 style="font-size: 1.25em">Time elapsed since start of game:</h2>
+                <p id="time-passed">0.00</p>
+            </div>
 
-            <section class="colourPicker">
+            <div class="colourPicker">
                 <table border="1" align="center">
                     <thead>
                     <tr>
-                        <td>Make your choice</td>
+                        <td class="codeText">Make your choice</td>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr align="center">
                         <td>
                             <div class="select red">R</div>
                             <div class="select blue">B</div>
                             <div class="select yellow">Y</div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr align="center">
                         <td>
                             <div class="select green">G</div>
                             <div class="select orange">O</div>
                             <div class="select purple">P</div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
+                    <tr align="center">
+                        <td class="reset">
                             <button disabled>Submit your guess</button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-            </section>
+            </div>
         </section>
 
         <section class="right">
-            <h2>Me</h2>
-            <p id="my-score">Won:0</p>
-            <p id="my-guesses">Guesses:0</p>
+            <div class="myStats">
+                <h2>Me</h2>
+                <p id="my-score">Won:0</p>
+                <p id="my-guesses">Guesses:0</p>
+            </div>
 
-            <section class="table">
+            <div class="table left">
                 <table class="myTable" border="1" align="right">
                     <thead>
                     <!-- My code -->
-                    <tr>
-                        <td>
+                    <tr align="center">
+                        <td class="codeText">
                             <div>My code</div>
                         </td>
                     </tr>
@@ -102,7 +114,7 @@
                     <!-- USE A LOOP IN JAVASCRIPT TO BUILD HTML CODE -->
                     </tbody>
                 </table>
-            </section>
+            </div>
         </section>
     </section>
 </main>
