@@ -7,7 +7,7 @@ function GameControls(socket, myTable, opponentTable) {
     this.playerType = null;
     var gameControls = this;
     this.state = "active";
-    this.MAX_GUESSES = 12;
+    this.MAX_GUESSES = 10;
     this.numGuesses = 0; //+1
     this.opponentTable = opponentTable;
     this.myTable = myTable;
@@ -79,7 +79,11 @@ function GameControls(socket, myTable, opponentTable) {
         if(this.state !== "active") return;
         //if position is valid
         console.log(this.cursorPos);
-        if(this.cursorPos === 3) this.colourPicker.submitButton.disabled = false;
+        if(this.cursorPos === 3) {
+            this.colourPicker.submitButton.disabled = false;
+            // line below to add hover properties
+            this.colourPicker.submitButton.classList.add("submit");
+        }
         if(pos < 3) {
             this.cursorPos = pos + 1;
             this.cursor = this.currentGuess[this.cursorPos];
@@ -100,6 +104,8 @@ function GameControls(socket, myTable, opponentTable) {
             //some logic
             gameControls.state = "passive";
             gameControls.colourPicker.submitButton.disabled = true;
+            // line below to remove submit class to remove hover
+            gameControls.colourPicker.submitButton.classList.remove("submit");
             gameControls.numGuesses++;
             stopTimer();
             document.getElementsByTagName("thead")[0].rows[0].hidden = false;
@@ -115,6 +121,8 @@ function GameControls(socket, myTable, opponentTable) {
 
         gameControls.numGuesses++;
         gameControls.colourPicker.submitButton.disabled = true;
+        // line below to remove submit class to remove hover
+        gameControls.colourPicker.submitButton.classList.remove("submit");
         gameControls.state = "passive";
     };
 
@@ -212,9 +220,9 @@ function initialiseTable(num){
     let elementTable = tables[num];
 
     //creating a 2d array
-    var table = Array.from(Array(12), () => new Array(8));
+    var table = Array.from(Array(10), () => new Array(8));
 
-    for(let i = 12; i > 0; i--) {
+    for(let i = 10; i > 0; i--) {
         let guess = elementTable.insertRow();
         guess.className =  "guess" + i;
         let attempt = guess.insertCell();
@@ -223,18 +231,18 @@ function initialiseTable(num){
         //empty pegs
         for(let j = 0; j < 4; j++) {
             let peg = new Peg("peg", "O").createPeg();
-            table[12-i][j] = peg;
+            table[10-i][j] = peg;
             attempt.appendChild(peg);
         }
         //feedback pegs
         for(let j = 0; j < 4; j++) {
             let peg = new Peg("feedback", "o").createPeg();
-            table[12-i][4+j] = peg;
+            table[10-i][4+j] = peg;
             feedback.appendChild(peg);
         }
         //appending a row
         elementTable.appendChild(guess);
-        //oppTable[12-i];
+        //oppTable[10-i];
     }
     return table;
 }
