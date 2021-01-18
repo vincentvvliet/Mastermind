@@ -81,8 +81,6 @@ function GameControls(socket, myTable, opponentTable) {
         console.log(this.cursorPos);
         if(this.cursorPos === 3) {
             this.colourPicker.submitButton.disabled = false;
-            // line below to add hover properties
-            this.colourPicker.submitButton.classList.add("submit");
         }
         if(pos < 3) {
             this.cursorPos = pos + 1;
@@ -104,8 +102,6 @@ function GameControls(socket, myTable, opponentTable) {
             //some logic
             gameControls.state = "passive";
             gameControls.colourPicker.submitButton.disabled = true;
-            // line below to remove submit class to remove hover
-            gameControls.colourPicker.submitButton.classList.remove("submit");
             gameControls.numGuesses++;
             stopTimer();
             document.getElementsByTagName("thead")[0].rows[0].hidden = false;
@@ -121,8 +117,6 @@ function GameControls(socket, myTable, opponentTable) {
 
         gameControls.numGuesses++;
         gameControls.colourPicker.submitButton.disabled = true;
-        // line below to remove submit class to remove hover
-        gameControls.colourPicker.submitButton.classList.remove("submit");
         gameControls.state = "passive";
     };
 
