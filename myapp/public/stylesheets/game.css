@@ -1,0 +1,238 @@
+/*TODO use grid*/
+/*TODO use :before & :after*/
+/*TODO position absolute*/
+
+@import url(style.css);
+
+/* TEXT */
+.codeText {
+    background-color: inherit;
+    text-decoration: underline;
+    border: none;
+}
+
+/* Used for media query, see below */
+.responsiveText {
+    display: none;
+    color: red;
+    font-weight: bold;
+}
+/* END TEXT */
+
+/* TABLES */
+table {
+    border: 2px double black;
+    padding: 5px;
+    border-radius: 7px;
+    text-align: center;
+    background-color: lightskyblue;
+}
+
+td {
+    background-color: black;
+    border-radius: 7px;
+}
+
+tr {
+    display: block;
+}
+
+.table, .colourPicker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* END TABLES */
+
+/* BUTTONS */
+button:disabled {
+    background-color: #74a3db;
+    color: lightgray;
+}
+
+td>button:enabled {
+    transform: scale(1);
+    animation: pulse 1.75s infinite;
+}
+
+.return {
+    margin-top: 30px;
+}
+/* END BUTTONS */
+
+/* DIV POSITIONING */
+.container {
+    width: 100%;
+}
+
+.left, .right, .center {
+    height: 590px;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.left, .right {
+    width: calc(40% - 42px);
+}
+
+.left {
+    text-align: left;
+}
+
+.center {
+    width: calc(20% - 42px);
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.myStats, .oppStats {
+    width: 132px;
+    padding: 0 10px;
+}
+
+.myStats {
+    float: left;
+}
+
+.oppStats {
+    float: right;
+}
+
+.table {
+    width: 304px;
+    border: none;
+    padding: 0;
+}
+
+.timer, .console {
+    padding: 0 5px;
+}
+
+.console {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+    width: auto;
+}
+
+.myStats, .oppStats, .timer, .console {
+    border: 1px black solid;
+    background-color: whitesmoke;
+    border-radius: 7px;
+}
+/* END DIV POSITIONING */
+
+/* PEGS */
+.peg, .select, .feedback {
+    border-radius: 50%;
+    border: 1px lightgray solid;
+    float: left;
+}
+
+.peg, .select {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
+
+.feedback {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+}
+
+.colourPicker {
+    margin: 25px 0;
+}
+
+.cursor {
+    transform: scale(1.5);
+    animation: pulse 1s infinite;
+    border: 2.5px solid white !important;
+}
+
+#red, #blue, #yellow, #green, #orange, #purple {
+    transform: scale(1.5);
+    animation: pulse 1.5s infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+#red:hover, #blue:hover, #yellow:hover, #green:hover, #orange:hover, #purple:hover {
+    transform: scale(1.085);
+    transition: all ease 500ms;
+}
+/* END PEGS */
+
+/* PEG COLOURS */
+.reset {
+    background-color: inherit;
+    border: none;
+}
+
+.empty {
+    background-color: grey;
+}
+
+#red, .red {
+    background-color: red;
+}
+
+#blue, .blue {
+    background-color: blue;
+}
+
+#yellow, .yellow {
+    background-color: yellow;
+}
+
+#green, .green {
+    background-color: green;
+}
+
+#orange, .orange {
+    background-color: orange;
+}
+
+#purple, .purple {
+    background-color: purple;
+}
+
+.white {
+    background-color: white;
+}
+
+.black {
+    background-color: black;
+}
+/* END PEG COLOURS */
+
+/* MEDIA QUERIES */
+/* Below 1283px, game screen design messed up */
+@media only screen and (max-width: 1283px) {
+    .responsiveText {
+        display: unset;
+    }
+}
+/* END MEDIA QUERIES */
