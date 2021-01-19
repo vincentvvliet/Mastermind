@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Mastermind - Game Rules</title>
-		<link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
-	</head>
-	
-	<body>
-		<header align="center">
-			<h1>Rules</h1>
-		</header>
-		
-		<main>
-			<p align="center"><b>Be a good player</b></p>
-			<p align="center"><b>No spam</b></p>
-			<p align="center"><b>Respect the developers</b></p>
-			
-			<br>
-			<br>
-			<br>
-			<br>
-			<br>
-			
-			<p align="center"><h2 align="center">Created by</h2></p>
-			<p align="center"><b>Vincent</b></p>
-			<p align="center"><b>George</b></p>
-			<p align="center"><b>42</b></p>
-		</main>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Mastermind - Game Rules</title>
+    <link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
+<!--    <link rel="stylesheet" href="stylesheets/rules.css">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">-->
+</head>
+
+<body>
+<header>
+    <div class="left">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
+    <div class="center">
+        <h1>Rules</h1>
+    </div>
+    <div class="right">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <br><br><br><br>
+        <p align="center">Hey there!</p>
+        <p>
+            This game is a variant of the original Mastermind, changed a bit to make it more fun for both players.
+            At the start of the game, you must use colour picker in the center of your screen to create a 4-colour code
+            for your opponent to guess.
+            During the game, you will the continue using the colour picker to make guesses as to what the code is that
+            your opponent has in turn created for you.
+            Both players take turns guessing what the code might be, all the while receiving automatic feedback showing
+            how close you were.<br>
+            The feedback works as follows:
+        <ul>
+            <li>A black peg means that one of the colours from your guess is correct and in the correct position.</li>
+            <li>A white peg means that one of the colours from your guess is correct but in the incorrect position.</li>
+            <li>The positioning of the black and white pegs in the feedback slots are no indication of the position on
+                the real board.
+            </li>
+        </ul>
+        The objective of the game is to guess the secret code before your opponent guesses theirs. <br>
+        The player who guesses their code first (meaning, least amount of guesses needed), wins! <br>
+        </p>
+        <p align="center">Good luck and have fun!</p>
+
+        <form action="/" method="get">
+            <button type="submit">Return to home page</button>
+        </form>
+    </div>
+</main>
+</body>
 </html>

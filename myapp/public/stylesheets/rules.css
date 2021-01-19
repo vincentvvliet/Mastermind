@@ -1,0 +1,28 @@
+@import url(style.css);
+
+html {
+    font-size: 20px;
+}
+
+.container {
+    display: block;
+    margin: auto;
+    width: 80%;
+    border: 1px black solid;
+    background-color: whitesmoke;
+    border-radius: 7px;
+    padding: 0 20px;
+}
+
+.center {
+    border-bottom: 1px solid black;
+}
+
+button {
+    width: 350px;
+    height: 65px;
+    margin: auto auto 25px;
+    border: none;
+    padding: 10px;
+    font-size: 30px;
+}
