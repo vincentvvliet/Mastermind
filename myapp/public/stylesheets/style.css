@@ -23,6 +23,11 @@ h1 {
             -1px 1px 0 #000,
             1px 1px 0 #000;
 }
+header {
+    display: grid;
+    grid-template-rows: 115px;
+    grid-template-columns: 33.3333% 33.3333% 33.3333%;
+}
 
 .owl {
     width: 120px;
@@ -50,13 +55,16 @@ h1 {
     }
 }
 
-header>.left, header>.center, header>.right {
-    border: none;
-    width: 33.3333%;
-    height: 115px;
-    padding: 0;
+.owl-left {
+    text-align: right;
 }
 
+.owl-right {
+    text-align: left;
+}
+/* END HEADER */
+
+/* DIV POSITIONING */
 .left {
     float: left;
     text-align: right;
@@ -71,7 +79,7 @@ header>.left, header>.center, header>.right {
     float: right;
     text-align: left;
 }
-/* END HEADER */
+/* END DIV POSITIONING */
 
 /* BUTTONS */
 button {

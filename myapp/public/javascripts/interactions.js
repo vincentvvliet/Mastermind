@@ -237,6 +237,8 @@ function GameControls(socket, myTable, opponentTable) {
 
     //game is finished, not aborted
     this.finishGame = function() {
+        //TODO add win sound for only winner, gameOver sound for only loser
+        audioWin.play();
         //disable everything, stop the timer
         gameControls.colourPicker.submitButton.disabled = true;
         stopTimer();
@@ -369,7 +371,8 @@ function Peg(type, size) {
     this.createPeg = function() {
         this.element = document.createElement('div');
         this.element.className = type + " empty";
-        this.element.textContent = size;
+        // Remove line below to remove "o" in pegs
+        // this.element.textContent = size;
         return this.element;
     }
 }

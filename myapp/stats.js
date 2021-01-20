@@ -15,7 +15,7 @@ var gameStats = (function() {
     decGamesNow : function() { gamesNow--; },
     getGamesNow : function() { return gamesNow; },
     updateAvgGuesses : function(guess) { averageGuesses = (averageGuesses + guess) / gamesInTotal; },
-    getAvgNumGuesses : function() { return averageGuesses; }
+    getAvgNumGuesses : function() { return averageGuesses.toFixed(2); }
   }
 })();
 
