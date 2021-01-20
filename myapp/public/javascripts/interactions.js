@@ -131,12 +131,14 @@ function GameControls(socket, myTable, opponentTable) {
         let feedback = ["empty", "empty", "empty", "empty"];
         for(let i = 0; i < blacks; i++) {
             fbRow[i].className = "feedback black";
-            fbRow[i].textContent = "b";
+            // Line below for debugging blacks
+            // fbRow[i].textContent = "b";
             feedback[i] = "black";
         }
         for(let i = 0; i < whites; i++) {
             fbRow[blacks + i].className = "feedback white";
-            fbRow[blacks + i].textContent = "w";
+            // Line below for debugging whites
+            // fbRow[blacks + i].textContent = "w";
             feedback[blacks + i] = "white";
         }
         return feedback;
@@ -314,7 +316,8 @@ function GameControls(socket, myTable, opponentTable) {
         let codeRow = document.getElementsByTagName("thead")[0].rows.item(1).cells[0].getElementsByTagName("div");
         for(let i = 0; i <code.length; i++) {
             codeRow[i].className += " " + code[i];
-            codeRow[i].textContent = code[i].substring(0,1);
+            // Line below for debugging colours of opponent code
+            // codeRow[i].textContent = code[i].substring(0,1);
         }
         gameControls.gameConsole.textContent = Status.opponentSubmittedCode;
     }
@@ -359,7 +362,8 @@ function ColourPicker(controls) {
             this.controls.cursor.className = this.controls.cursor.classList.item(0) + " " + colour + " " + this.controls.cursor.classList.item(1);
         }
         //render the choice on the current peg
-        this.controls.cursor.textContent = colour.substring(0,1).toUpperCase();
+        // Line below for debugging colours of peg
+        // this.controls.cursor.textContent = colour.substring(0,1).toUpperCase();
         this.controls.moveCursor(this.controls.cursorPos);
     };
 }
