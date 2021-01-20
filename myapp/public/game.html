@@ -4,32 +4,40 @@
     <meta charset="UTF-8">
     <title>Mastermind - Game</title>
     <link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
-<!--    <link rel="stylesheet" href="stylesheets/style.css">-->
-<!--    <link rel="preconnect" href="https://fonts.gstatic.com">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">-->
+    <link rel="stylesheet" href="stylesheets/game.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<header align="center">
-    <h1>Mastermind</h1>
+<header>
+    <div class="left">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
+    <div class="center">
+        <h1>MASTERMIND</h1>
+    </div>
+    <div class="right">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
 </header>
+
 
 <main>
     <section class="container">
         <section class="left">
-            <div class="oppStats">
-                <h2>Opponent</h2>
-                <p id="opponent-score">Won:0</p>
+            <div class="myStats">
+                <h2>Me</h2>
                 <p id="opponent-guesses">Guesses:0</p>
             </div>
 
             <div class="table right">
-                <table id="opponentTable" border="1" align="left">
+                <table id="opponenttable" border="1" align="left">
                     <thead>
                     <!-- Opponent's code -->
                     <tr align="center">
                         <td class="codeText">
-                            <div>Opponent's code</div>
+                            <div>My code to guess:</div>
                         </td>
                     </tr>
                     <!-- Code to guess -->
@@ -64,42 +72,51 @@
                     <tbody>
                     <tr align="center">
                         <td>
-                            <div class="select red">R</div>
-                            <div class="select blue">B</div>
-                            <div class="select yellow">Y</div>
+                            <div class="select red" id="red">R</div>
+                            <div class="select blue" id="blue">B</div>
+                            <div class="select yellow" id="yellow">Y</div>
                         </td>
                     </tr>
                     <tr align="center">
                         <td>
-                            <div class="select green">G</div>
-                            <div class="select orange">O</div>
-                            <div class="select purple">P</div>
+                            <div class="select green" id="green">G</div>
+                            <div class="select orange" id="orange">O</div>
+                            <div class="select purple" id="purple">P</div>
                         </td>
                     </tr>
                     <tr align="center">
                         <td class="reset">
-                            <button disabled>Submit your guess</button>
+                            <button class="submit" disabled>Submit your guess</button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
+            <div class="console">
+                <p class="responsiveText">Current screen resolution is too small. <br>Please use at least 1316x768.</p>
+                <p class="game-console"></p>
+            </div>
+
+            <form action="/" method="get">
+                <button class="return" type="submit">Return to Homepage</button>
+            </form>
         </section>
 
         <section class="right">
-            <div class="myStats">
-                <h2>Me</h2>
-                <p id="my-score">Won:0</p>
+            <div class="oppStats">
+                <h2>Opponent</h2>
+                <!--                <p id="my-score">Won:0</p>-->
                 <p id="my-guesses">Guesses:0</p>
             </div>
 
             <div class="table left">
-                <table class="myTable" border="1" align="right">
+                <table class="mytable" border="1" align="right">
                     <thead>
                     <!-- My code -->
                     <tr align="center">
                         <td class="codeText">
-                            <div>My code</div>
+                            <div>Opponent's code to guess:</div>
                         </td>
                     </tr>
                     <tr align="center">
@@ -119,8 +136,8 @@
     </section>
 </main>
 <script src="javascripts/config.js" language="javascript"></script>
+<script src="javascripts/messages.js" language="javascript"></script>
 <script src="javascripts/statuses.js" language="javascript"></script>
 <script src="javascripts/interactions.js" language="javascript"></script>
-
 </body>
 </html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mastermind</title>
+    <link rel="icon" type="image/x-icon" href="data/images/mastermind_favicon.ico">
+    <link rel="stylesheet" href="stylesheets/splash.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <div class="left">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
+    <div class="center">
+        <h1>MASTERMIND</h1>
+    </div>
+    <div class="right">
+        <img class="owl" src="data/images/owl.png" alt="Wise owl">
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="left">
+            <div class="image">
+                <img src="data/images/pegs.png" align="left">
+            </div>
+            <div class="board">
+                <img src="data/images/board.png" align="left">
+            </div>
+        </div>
+
+        <div class="center">
+            <div class="button">
+                <form action="/play" method="get" align="center">
+                    <button type="submit">PLAY!</button>
+                </form>
+            </div>
+
+            <div class="button">
+                <form action="/options" method="get" align="center">
+                    <button type="submit">OPTIONS</button>
+                </form>
+            </div>
+
+            <div class="button">
+                <form action="/rules" method="get" align="center">
+                    <button type="submit">RULES</button>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="right">
+            <div class="image">
+                <img src="data/images/pegs2.png" align="right">
+            </div>
+
+            <div class="stats">
+                <!-- TODO template ejs-->
+                <ul>
+                    <li id="games-ongoing">
+                        <%= getGamesNow %>
+                        <%if (getGamesNow != 1) { %>
+                            games
+                        <% } else { %>
+                            game
+                        <% } %> are being played right now
+                    </li>
+                    <li id="games-played">
+                        <%= getGamesInTotal %> games have been played in total
+                    </li>
+                    <li id="average-guesses">
+                        <%= getAvgNumGuesses %> is the average number of guesses
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
