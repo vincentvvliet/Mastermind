@@ -222,7 +222,7 @@ td>button:enabled {
     background-color: white;
 }
 
-.black {
+.black, .code {
     background-color: black;
 }
 /* END PEG COLOURS */

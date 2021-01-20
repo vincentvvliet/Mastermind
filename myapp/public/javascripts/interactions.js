@@ -1,6 +1,8 @@
 //@ts-check
 
 var intervals = {};
+var audioWin = new Audio('/../data/audio/win.mp3');
+var audioGameOver = new Audio('/../data/audio/gameOver.mp3');
 
 //main utility for the game
 function GameControls(socket, myTable, opponentTable) {
@@ -117,7 +119,7 @@ function GameControls(socket, myTable, opponentTable) {
         if(gameControls.playerType === "A") oppGuessNumber = gameControls.numGuesses;
         else oppGuessNumber = gameControls.numGuesses + 1;
         //update the opponent's guess number
-        document.getElementById("opponent-guesses").textContent = "Guesses:" + oppGuessNumber;
+        document.getElementById("opponent-guesses").textContent = "Guesses: " + oppGuessNumber;
 
         //render the guess and feedback
         let guessRow = gameControls.myTable[this.MAX_GUESSES - oppGuessNumber]; 
@@ -200,15 +202,24 @@ function GameControls(socket, myTable, opponentTable) {
         if(gameControls.playerType === "A") gameControls.startGuess();
     }
 
-    //game is finished, not aborted
     this.finishGame = function() {
+        //game is finished, not aborted
         //TODO add win sound for only winner, gameOver sound for only loser
+        // audioGameOver.play();
         audioWin.play();
+
         //disable everything, stop the timer
         gameControls.colourPicker.submitButton.disabled = true;
         stopTimer();
         //render the opponent's code
         document.getElementsByTagName("thead")[0].rows[1].hidden = false;
+
+        //TODO avoid code duplication from renderOppCode
+        let codeRow = document.getElementsByTagName("thead")[0].rows.item(1).cells[0].getElementsByTagName("div");
+        for(let i = 0; i < codeRow.length; i++) {
+            codeRow[i].classList.remove("code");
+        }
+
         //give the link to play again
         gameControls.gameConsole.innerHTML = gameControls.playerType == gameControls.winner ? Status.won : Status.lost;
         gameControls.gameConsole.innerHTML += Status.playAgain;
@@ -222,10 +233,11 @@ function GameControls(socket, myTable, opponentTable) {
 
         //get the feedback
         let feedback = gameControls.checkGuess(choice);
+        console.log(choice);
         console.log("My choice: " + choice + "; feedback: " + feedback);
 
         gameControls.numGuesses++;
-        document.getElementById("my-guesses").textContent = "Guesses:" + gameControls.numGuesses; 
+        document.getElementById("my-guesses").textContent = "Guesses: " + gameControls.numGuesses;
         
         //disable interactivity
         gameControls.removeEventListenersFromCurrentRow();
@@ -398,8 +410,6 @@ function initialiseAudio() {
     //audio
     var audioButton = new Audio('/../data/audio/submit.mp3');
     var audioSelector = new Audio('/../data/audio/click.mp3');
-    var audioWin = new Audio('/../data/audio/win.mp3');
-    var audioGameOver = new Audio('/../data/audio/gameOver.mp3');
 
     //Add event listeners to selectors in colour picker
     for (let i = 0; i < selector.length; i++) {
@@ -420,16 +430,16 @@ function initialiseAudio() {
     function playSelectorSound() {
         audioSelector.play();
     }
-
-    //play win sound
-    function playWinSound() {
-        audioWin.play();
-    }
-
-    //play game over sound
-    function playGameOverSound() {
-        audioGameOver.play();
-    }
+    //
+    // //play win sound
+    // function playWinSound() {
+    //     audioWin.play();
+    // }
+    //
+    // //play game over sound
+    // function playGameOverSound() {
+    //     audioGameOver.play();
+    // }
 }
 
 (function setup() {
