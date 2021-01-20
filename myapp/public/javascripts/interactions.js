@@ -1,36 +1,5 @@
 //@ts-check
 
-var button = document.getElementsByTagName("button");
-var selector = document.getElementsByClassName("select");
-var audioButton = new Audio('/../data/audio/submit.mp3');
-var audioSelector = new Audio('/../data/audio/click.mp3');
-var audioWin = new Audio('/../data/audio/win.mp3');
-var audioGameOver = new Audio('/../data/audio/gameOver.mp3');
-
-for (let i = 0; i < selector.length; i++) {
-    selector[i].addEventListener('click', playSelectorSound, false);
-}
-
-for (let i = 0; i < button.length; i++) {
-    button[i].addEventListener('click', playButtonSound, false);
-}
-
-function playButtonSound() {
-    audioButton.play();
-}
-
-function playSelectorSound() {
-    audioSelector.play();
-}
-
-function playWinSound() {
-    audioWin.play();
-}
-
-function playGameOverSound() {
-    audioGameOver.play();
-}
-
 var intervals = {};
 
 //main utility for the game
@@ -131,14 +100,10 @@ function GameControls(socket, myTable, opponentTable) {
         let feedback = ["empty", "empty", "empty", "empty"];
         for(let i = 0; i < blacks; i++) {
             fbRow[i].className = "feedback black";
-            // Line below for debugging blacks
-            // fbRow[i].textContent = "b";
             feedback[i] = "black";
         }
         for(let i = 0; i < whites; i++) {
             fbRow[blacks + i].className = "feedback white";
-            // Line below for debugging whites
-            // fbRow[blacks + i].textContent = "w";
             feedback[blacks + i] = "white";
         }
         return feedback;
@@ -161,13 +126,11 @@ function GameControls(socket, myTable, opponentTable) {
         for(let i = 0; i < guess.length; i++) {
             guessRow[i].classList.remove("empty");
             guessRow[i].className += " " + guess[i];
-            guessRow[i].textContent = guess[i].substring(0,1);
         }
         //render the feedback
         for(let i = 0; i < feedback.length; i++) {
             guessRow[guess.length + i].classList.remove("empty");
             guessRow[guess.length + i].className += " " + feedback[i];
-            guessRow[guess.length + i].textContent = feedback[i].substring(0,1);
         }
     }
 
@@ -316,8 +279,6 @@ function GameControls(socket, myTable, opponentTable) {
         let codeRow = document.getElementsByTagName("thead")[0].rows.item(1).cells[0].getElementsByTagName("div");
         for(let i = 0; i <code.length; i++) {
             codeRow[i].className += " " + code[i];
-            // Line below for debugging colours of opponent code
-            // codeRow[i].textContent = code[i].substring(0,1);
         }
         gameControls.gameConsole.textContent = Status.opponentSubmittedCode;
     }
@@ -362,25 +323,22 @@ function ColourPicker(controls) {
             this.controls.cursor.className = this.controls.cursor.classList.item(0) + " " + colour + " " + this.controls.cursor.classList.item(1);
         }
         //render the choice on the current peg
-        // Line below for debugging colours of peg
-        // this.controls.cursor.textContent = colour.substring(0,1).toUpperCase();
         this.controls.moveCursor(this.controls.cursorPos);
     };
 }
 
-function Peg(type, size) {
+function Peg(type) {
     this.type = type;
-    this.size = size;
 
+    //function to create peg element
     this.createPeg = function() {
         this.element = document.createElement('div');
         this.element.className = type + " empty";
-        // Remove line below to remove "o" in pegs
-        // this.element.textContent = size;
         return this.element;
     }
 }
 
+// function to create timer
 function setTimer() {
     var timer = document.getElementById("time-passed");
     //console.log(timer);
@@ -408,6 +366,7 @@ function initialiseTable(num){
     //creating a 2d array
     var table = Array.from(Array(10), () => new Array(8));
 
+    //create table rows
     for(let i = 10; i > 0; i--) {
         let guess = elementTable.insertRow();
         guess.className =  "guess" + i;
@@ -416,13 +375,13 @@ function initialiseTable(num){
 
         //empty pegs
         for(let j = 0; j < 4; j++) {
-            let peg = new Peg("peg", "O").createPeg();
+            let peg = new Peg("peg").createPeg();
             table[10-i][j] = peg;
             attempt.appendChild(peg);
         }
         //feedback pegs
         for(let j = 0; j < 4; j++) {
-            let peg = new Peg("feedback", "o").createPeg();
+            let peg = new Peg("feedback").createPeg();
             table[10-i][4+j] = peg;
             feedback.appendChild(peg);
         }
@@ -432,10 +391,54 @@ function initialiseTable(num){
     return table;
 }
 
+function initialiseAudio() {
+    var button = document.getElementsByTagName("button");
+    var selector = document.getElementsByClassName("select");
+
+    //audio
+    var audioButton = new Audio('/../data/audio/submit.mp3');
+    var audioSelector = new Audio('/../data/audio/click.mp3');
+    var audioWin = new Audio('/../data/audio/win.mp3');
+    var audioGameOver = new Audio('/../data/audio/gameOver.mp3');
+
+    //Add event listeners to selectors in colour picker
+    for (let i = 0; i < selector.length; i++) {
+        selector[i].addEventListener('click', playSelectorSound, false);
+    }
+
+    //Add event listeners to all buttons
+    for (let i = 0; i < button.length; i++) {
+        button[i].addEventListener('click', playButtonSound, false);
+    }
+
+    //play button sound
+    function playButtonSound() {
+        audioButton.play();
+    }
+
+    //play selector sound
+    function playSelectorSound() {
+        audioSelector.play();
+    }
+
+    //play win sound
+    function playWinSound() {
+        audioWin.play();
+    }
+
+    //play game over sound
+    function playGameOverSound() {
+        audioGameOver.play();
+    }
+}
+
 (function setup() {
     //initialising boards for opponent and me and creating 2d arrays with references to the cells
     var oppTable = initialiseTable(0);
     var myTable = initialiseTable(2);
+
+    //initialise audio
+    initialiseAudio();
 
     //get the socket and initialise the game controls
     var socket = new WebSocket(Setup.WS_URL);
