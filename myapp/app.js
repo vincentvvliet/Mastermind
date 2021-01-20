@@ -26,7 +26,7 @@ require("./routes/index.js")(app);
 app.get("/", (req, res) => {
   res.render("splash.ejs", {
     getGamesNow: gameStats.getGamesNow(),
-    getGamesInTotal: gameStats.getGamesInTotal(),
+    getGamesInTotal: gameStats.getGamesInTotal() - 1,
     getAvgNumGuesses: gameStats.getAvgNumGuesses()
   });
 });
