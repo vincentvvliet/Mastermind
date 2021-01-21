@@ -236,5 +236,8 @@ td>button:enabled {
     .responsiveText {
         display: unset;
     }
+    .game-console {
+        display: none;
+    }
 }
 /* END MEDIA QUERIES */
