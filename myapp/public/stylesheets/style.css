@@ -1,3 +1,5 @@
+/*TODO use :before & :after & :active */
+
 html {
     height: 100vh;
 }
@@ -12,6 +14,7 @@ body {
 
 /* HEADER */
 h1 {
+    text-align: center;
     font-size: 60px;
     margin: 20px 0;
     -webkit-text-stroke: 0.5px black;
@@ -26,7 +29,7 @@ h1 {
 header {
     display: grid;
     grid-template-rows: 115px;
-    grid-template-columns: repeat(3,33.3333%);
+    grid-template-columns: calc(33.3333% - 64px) calc(33.3333% + 128px) calc(33.3333% - 64px);
     position: absolute;
     left: 0;
     top: 0;
@@ -40,12 +43,14 @@ header {
     animation: rotate 2s infinite linear;
 }
 
-.owl:before {
-
+h1::before {
+    content: "- ";
+    margin: 0 5px;
 }
 
-.owl:after {
-
+h1::after {
+    content: " -";
+    margin: 0 5px;
 }
 
 /* Rotate animation */
@@ -108,6 +113,11 @@ button {
     box-shadow: 0 0 0 0 rgba(0,0,0,1);
     color: inherit;
     padding: 10px;
+}
+
+button:active {
+    border: 2px solid black;
+    background-color: darkblue;
 }
 
 button:enabled:hover {
