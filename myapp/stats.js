@@ -16,7 +16,7 @@ var gameStats = (function() {
     updateGamesFinished : function() { gamesFinished++; },
     getGamesFinished : function() { return gamesFinished; },
     incGamesNow : function() { gamesNow++; },
-    decGamesNow : function() { gamesNow--; },
+    decGamesNow : function() { gamesNow = Math.max(0,gamesNow - 1); },
     getGamesNow : function() { return gamesNow; },
     updateAvgGuesses : function(guess) {
       sumOfGuesses += guess;

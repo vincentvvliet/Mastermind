@@ -204,9 +204,14 @@ function GameControls(socket, myTable, opponentTable) {
 
     this.finishGame = function() {
         //game is finished, not aborted
-        //TODO add win sound for only winner, gameOver sound for only loser
-        // audioGameOver.play();
-        audioWin.play();
+
+        //Due to the server running on localhost, both sounds will be heard.
+        //In practice, if played on 2 different computers, sounds will be separate.
+        if (gameControls.winner === gameControls.playerType) {
+            audioWin.play();
+        } else {
+            audioGameOver.play();
+        }
 
         //disable everything, stop the timer
         gameControls.colourPicker.submitButton.disabled = true;
@@ -238,7 +243,6 @@ function GameControls(socket, myTable, opponentTable) {
         
         //disable interactivity
         gameControls.removeEventListenersFromCurrentRow();
-        //In this case the game is over
 
         //send current guess to the server
         if(gameControls.playerType === "A") {
@@ -253,6 +257,7 @@ function GameControls(socket, myTable, opponentTable) {
             socket.send(JSON.stringify(msg));
         }
 
+        //In this case the game is over
         //but the game already has a winner
         if(gameControls.numGuesses === gameControls.MAX_GUESSES || gameControls.winner != null) {
             gameControls.state = "passive";
@@ -363,7 +368,6 @@ function Peg(type) {
 // function to create timer
 function setTimer() {
     var timer = document.getElementById("time-passed");
-    //console.log(timer);
     intervals[timer.id] = setInterval(function(){
         let time = timer.innerHTML;
         let seconds = (parseInt(time.substring(time.length - 2)) + 1) % 60;     //get last 2 digits
@@ -423,12 +427,12 @@ function initialiseAudio() {
 
     //Add event listeners to selectors in colour picker
     for (let i = 0; i < selector.length; i++) {
-        selector[i].addEventListener('click', playSelectorSound, false);
+        selector[i].addEventListener('click', playSelectorSound);
     }
 
     //Add event listeners to all buttons
     for (let i = 0; i < button.length; i++) {
-        button[i].addEventListener('click', playButtonSound, false);
+        button[i].addEventListener('click', playButtonSound);
     }
 
     //play button sound
@@ -440,16 +444,6 @@ function initialiseAudio() {
     function playSelectorSound() {
         audioSelector.play();
     }
-    //
-    // //play win sound
-    // function playWinSound() {
-    //     audioWin.play();
-    // }
-    //
-    // //play game over sound
-    // function playGameOverSound() {
-    //     audioGameOver.play();
-    // }
 }
 
 (function setup() {
@@ -486,7 +480,7 @@ function initialiseAudio() {
             controls.state = "active";
             controls.addEventListenersCurrentPos(0);
             controls.gameConsole.textContent = Status.choose;
-        } //other player has made the guess
+        } //other player has chosen the code
         else if (message.type == Messages.T_PLAYER_A_CODE || message.type == Messages.T_PLAYER_B_CODE) {
             controls.oppCode = message.data;
             controls.renderOpponentCode(message.data, "ongoing");
@@ -507,10 +501,6 @@ function initialiseAudio() {
             controls.finishGame();
         }
     }
-
-    /*socket.onopen = function () {
-        socket.send("{}");
-    };*/
 
     socket.onclose = function () {
         //the game is aborted by the other player

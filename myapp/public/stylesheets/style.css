@@ -1,5 +1,3 @@
-/*TODO use :before & :after & :active */
-
 html {
     height: 100vh;
 }
@@ -26,6 +24,7 @@ h1 {
             -1px 1px 0 #000,
             1px 1px 0 #000;
 }
+
 header {
     display: grid;
     grid-template-rows: 115px;
@@ -115,15 +114,15 @@ button {
     padding: 10px;
 }
 
-button:active {
-    border: 2px solid black;
-    background-color: darkblue;
-}
-
 button:enabled:hover {
     background-color: royalblue;
     text-decoration: underline;
     transform: scale(1.065);
     transition: all ease 500ms;
+}
+
+button:enabled:active {
+    border: 2px solid black;
+    background-color: red;
 }
 /* END BUTTONS */

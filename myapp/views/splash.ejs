@@ -57,14 +57,20 @@
                 <ul>
                     <li id="games-ongoing">
                         <%= getGamesNow %>
-                        <%if (getGamesNow != 1) { %>
+                        <%if (getGamesNow !== 1) { %>
                             games are
                         <% } else { %>
                             game is
                         <% } %> being played right now
                     </li>
                     <li id="games-played">
-                        <%= getGamesFinished %> games have been played in total
+                        <%= getGamesFinished %>
+                        <%if (getGamesFinished !== 1) { %>
+                            games have
+                        <% } else { %>
+                            game has
+                        <% } %>
+                         been played in total
                     </li>
                     <li id="average-guesses">
                         <%= getAvgNumGuesses %> is the average number of guesses

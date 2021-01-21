@@ -1,9 +1,9 @@
 //@ts-check
 
 var Status = {
-    //alerted
+    //rendered in the "console"
     won : "<p>Congratulations! You won the game!</p>",
-    //alerted
+    //rendered in the "console"
     lost : "<p>Sorry, you lost the game! :(</p>",
     //rendered in the "console"
     playAgain : `<form action="/play" method="get" align="center"><button type="submit">PLAY AGAIN!</button></form>`,
