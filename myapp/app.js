@@ -155,10 +155,6 @@ wss.on("connection", function connection(ws) {
 
       gameStats.decGamesNow();
 
-      // if (gameObj.isFinished()) {
-      //   gameStats.updateGamesFinished();
-      // }
-
       if(!gameObj.isFinished())  {
         gameObj.abort();
       }
