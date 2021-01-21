@@ -40,6 +40,14 @@ header {
     animation: rotate 2s infinite linear;
 }
 
+.owl:before {
+
+}
+
+.owl:after {
+
+}
+
 /* Rotate animation */
 @keyframes rotate {
     0% {

@@ -105,15 +105,12 @@ wss.on("connection", function connection(ws) {
 
       let guesses = 10;
       if(gameObj.winner == gameObj.playerA) {
-        // gameObj.playerAGuesses++;
         guesses = gameObj.playerAGuesses;
       } else {
-        // gameObj.playerBGuesses++;
         guesses = gameObj.playerBGuesses;
       }
 
       gameStats.updateGamesFinished();
-      gameStats.updateSumOfGuesses(guesses);
       gameStats.updateAvgGuesses(guesses);
       console.log("[SERVER] Player " + message.data + " has won the game in " + guesses + ". Game finished");
       console.log(gameObj.winner + " " + gameObj.playerAGuesses);

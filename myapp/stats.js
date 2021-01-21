@@ -7,8 +7,8 @@ var gameStats = (function() {
   var gamesInTotal = 0; /* number of games than have been initialized in total */
   var gamesFinished = 0; /* number of games completed */
   var gamesNow = 0; /* number of games being played now */
-  var averageGuesses = 0; /* number of guesses to complete the game */
-  var sumOfGuesses = 0;
+  var sumOfGuesses = 0; /* used to keep track of average number of guesses */
+  var avgGuesses = 0; /* current average guess number */
 
   return {
     incGamesInTotal : function() { gamesInTotal++; },
@@ -18,9 +18,10 @@ var gameStats = (function() {
     incGamesNow : function() { gamesNow++; },
     decGamesNow : function() { gamesNow--; },
     getGamesNow : function() { return gamesNow; },
-    updateSumOfGuesses: function(guess) { sumOfGuesses += guess; },
-    updateAvgGuesses : function(guess) { averageGuesses = (sumOfGuesses + guess) / gamesFinished; },
-    getAvgNumGuesses : function() { return averageGuesses.toFixed(2); }
+    updateAvgGuesses : function(guess) {
+      sumOfGuesses += guess;
+      avgGuesses = sumOfGuesses / gamesFinished; },
+    getAvgNumGuesses : function() { return avgGuesses.toFixed(1); }
   }
 })();
 

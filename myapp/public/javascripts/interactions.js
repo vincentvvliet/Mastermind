@@ -214,11 +214,8 @@ function GameControls(socket, myTable, opponentTable) {
         //render the opponent's code
         document.getElementsByTagName("thead")[0].rows[1].hidden = false;
 
-        //TODO avoid code duplication from renderOppCode
-        let codeRow = document.getElementsByTagName("thead")[0].rows.item(1).cells[0].getElementsByTagName("div");
-        for(let i = 0; i < codeRow.length; i++) {
-            codeRow[i].classList.remove("code");
-        }
+        //call renderOpponentCode with empty array of length 4 to reveal code
+        gameControls.renderOpponentCode(["","","",""], "endGame");
 
         //give the link to play again
         gameControls.gameConsole.innerHTML = gameControls.playerType == gameControls.winner ? Status.won : Status.lost;
@@ -286,12 +283,25 @@ function GameControls(socket, myTable, opponentTable) {
         gameControls.addEventListenersCurrentPos(0);
     }
 
-    //initialise the code but it remains hidden
-    this.renderOpponentCode = function(code) {
+    //At start of game: initialise the code but it remains hidden
+    //At end of game: reveal the code
+    this.renderOpponentCode = function(code, type) {
         let codeRow = document.getElementsByTagName("thead")[0].rows.item(1).cells[0].getElementsByTagName("div");
-        for(let i = 0; i <code.length; i++) {
-            codeRow[i].className += " " + code[i];
+        for(let i = 0; i < code.length; i++) {
+            //at the end of game, remove code class to show code underneath
+            if (type === "endGame") {
+                codeRow[i].classList.remove("code");
+            }
+            //if not end of game, initialise the code
+            else {
+                codeRow[i].className += " " + code[i];
+            }
         }
+        // To avoid changing the text content at the end of this function (because game ends), return
+        if (type === "endGame") {
+            return;
+        }
+
         gameControls.gameConsole.textContent = Status.opponentSubmittedCode;
     }
     
@@ -479,7 +489,7 @@ function initialiseAudio() {
         } //other player has made the guess
         else if (message.type == Messages.T_PLAYER_A_CODE || message.type == Messages.T_PLAYER_B_CODE) {
             controls.oppCode = message.data;
-            controls.renderOpponentCode(message.data);
+            controls.renderOpponentCode(message.data, "ongoing");
             //I have already sent and chosen the code - the game can be started
             //otherwise I need to choose the code
             if(controls.myCode != null) controls.startGame();
@@ -507,6 +517,8 @@ function initialiseAudio() {
         if (controls.winner == null) {
             controls.state = "passive";
             controls.colourPicker.submitButton.disabled = true;
+            //call renderOpponentCode with empty array of length 4 to reveal code
+            controls.renderOpponentCode(["","","",""], "endGame");
             stopTimer();
             controls.gameConsole.innerHTML = Status.playAgain;
             alert(Status.aborted);
