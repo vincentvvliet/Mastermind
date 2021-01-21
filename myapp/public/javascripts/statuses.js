@@ -4,15 +4,15 @@ var Status = {
     //alerted
     won : "<p>Congratulations! You won the game!</p>",
     //alerted
-    lost : "<p>Sorry, but you have lost this game :(</p>",
+    lost : "<p>Sorry, you lost the game! :(</p>",
     //rendered in the "console"
     playAgain : `<form action="/play" method="get" align="center"><button type="submit">PLAY AGAIN!</button></form>`,
     //rendered in the "console"
     choose : "Choose your code by clicking on the colour picker",
     //rendered in the "console"
-    playerAIntro : "Now you have to guess opponent's code quicker (max 10 guesses, you lose if you miss the last guess). Your turn now",
+    playerAIntro : "Now guess the opponent's code before they guess yours! (max 10 guesses) Your turn now",
     //rendered in the "console"
-    playerBIntro : "Now you have to guess opponent's code quicker (you win if the opponent misses the last guess). Opponent's turn now",
+    playerBIntro : "Now guess the opponent's code before they guess yours! (if the opponent runs out of guesses, you win) Opponent's turn now",
     //rendered in the "console"
     opponentSubmittedCode: "Your opponent has chosen the code",
     //rendered in the "console"
