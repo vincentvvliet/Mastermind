@@ -26,7 +26,7 @@ require("./routes/index.js")(app);
 app.get("/", (req, res) => {
   res.render("splash.ejs", {
     getGamesNow: gameStats.getGamesNow(),
-    getGamesInTotal: gameStats.getGamesInTotal() - 1,
+    getGamesFinished: gameStats.getGamesFinished(),
     getAvgNumGuesses: gameStats.getAvgNumGuesses()
   });
 });
@@ -104,19 +104,19 @@ wss.on("connection", function connection(ws) {
       gameObj.playerB.send(JSON.stringify(message));
 
       let guesses = 10;
-      if(gameObj.winner === "A") {
-        gameObj.playerAGuesses++;
+      if(gameObj.winner == gameObj.playerA) {
+        // gameObj.playerAGuesses++;
         guesses = gameObj.playerAGuesses;
       } else {
-        gameObj.playerBGuesses++;
+        // gameObj.playerBGuesses++;
         guesses = gameObj.playerBGuesses;
       }
 
+      gameStats.updateGamesFinished();
+      gameStats.updateSumOfGuesses(guesses);
       gameStats.updateAvgGuesses(guesses);
-      console.log("[SERVER] Player " + message.data + " has won the game. Game finished");
-      //decrement games now
-      gameStats.decGamesNow(); //the game will be cleared from websockets dictionary after some time
-
+      console.log("[SERVER] Player " + message.data + " has won the game in " + guesses + ". Game finished");
+      console.log(gameObj.winner + " " + gameObj.playerAGuesses);
     } //a normal message from player A
     else if(player === "A") {
       //if player A has chosen the code, set it and send to player B
@@ -156,11 +156,15 @@ wss.on("connection", function connection(ws) {
       //abort the game if possible; otherwise the game is already completed
       let gameObj = websockets[con.id];
 
+      gameStats.decGamesNow();
+
+      // if (gameObj.isFinished()) {
+      //   gameStats.updateGamesFinished();
+      // }
+
       if(!gameObj.isFinished())  {
         gameObj.abort();
-        gameStats.decGamesNow();
       }
-      //update stats???
       
       //determine whose connection remains open and close it
       try {
